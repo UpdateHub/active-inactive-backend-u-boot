@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+exec fw_printenv -n updatehub_active
