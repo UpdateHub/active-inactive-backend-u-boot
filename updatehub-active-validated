@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+BOOTCOUNT_ENV=1
+
+if [ -f /etc/default/updatehub-active ]; then
+    . /etc/default/updatehub-active
+fi
+
+# By default, machines use the bootcount inside environment so we must
+# reset 'upgrade_available' so U-Boot stop counting the boots
+if [ "$BOOTCOUNT_ENV" = "1" ]; then
+    fw_setenv upgrade_available 0
+    exit $?
+fi
+
+exit 0
