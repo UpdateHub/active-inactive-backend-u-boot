@@ -3,11 +3,11 @@
 active=$1
 
 case "$active" in
-	0|1)
-    fw_setenv updatehub_active "$1"
-	exit $?
-	;;
-	*)
-	exit 1
-	;;
+    0|1)
+        fw_setenv updatehub_active "$1"
+        exit $?
+        ;;
+    *)
+        exit 1
+        ;;
 esac
