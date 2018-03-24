@@ -12,9 +12,11 @@ case "$active" in
     0|1)
         # By default, machines use the bootcount inside environment so
         # we must set 'upgrade_available' to force U-Boot to count
-        # the boot attempts.
+        # the boot attempts. We also need to set 'bootcount' to 0 to ensure
+        # a proper initialization.
         if [ "$BOOTCOUNT_ENV" = "1" ]; then
             fw_setenv upgrade_available 1
+            fw_setenv bootcount 0
         fi
 
         fw_setenv updatehub_active "$1"
