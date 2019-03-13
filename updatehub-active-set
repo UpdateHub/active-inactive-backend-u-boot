@@ -2,6 +2,14 @@
 
 BOOTCOUNT_ENV=1
 
+active_set_prepare() {
+    :
+}
+
+active_set_finish() {
+    :
+}
+
 if [ -f /etc/default/updatehub-active ]; then
     . /etc/default/updatehub-active
 fi
@@ -15,11 +23,15 @@ case "$active" in
         # the boot attempts. We also need to set 'bootcount' to 0 to ensure
         # a proper initialization.
         if [ "$BOOTCOUNT_ENV" = "1" ]; then
+            active_set_prepare
             fw_setenv upgrade_available 1
             fw_setenv bootcount 0
+            active_set_finish
         fi
 
+        active_set_prepare
         fw_setenv updatehub_active "$1"
+        active_set_finish
         exit $?
         ;;
     *)

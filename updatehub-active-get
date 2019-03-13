@@ -1,3 +1,15 @@
 #!/bin/sh -e
 
-exec fw_printenv -n updatehub_active
+active_get_prepare() {
+    :
+}
+
+active_get_finish() {
+    :
+}
+
+active_get_prepare
+fw_printenv -n updatehub_active
+active_get_finish
+
+exit 0
