@@ -8,6 +8,10 @@ active_get_finish() {
     :
 }
 
+if [ -f /etc/default/updatehub-active ]; then
+    . /etc/default/updatehub-active
+fi
+
 active_get_prepare
 fw_printenv -n updatehub_active
 active_get_finish
