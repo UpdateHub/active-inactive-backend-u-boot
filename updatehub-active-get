@@ -8,12 +8,23 @@ active_get_finish() {
     :
 }
 
+log() {
+    logger -t updatehub "updatehub-active-get: $@"
+}
+
+printenv() {
+    log "getting variable $1"
+    value=$(fw_printenv -n "$1")
+    log "variable $1 is $value"
+    echo $value
+}
+
 if [ -f /etc/default/updatehub-active ]; then
     . /etc/default/updatehub-active
 fi
 
 active_get_prepare
-fw_printenv -n updatehub_active
+printenv updatehub_active
 active_get_finish
 
 exit 0

@@ -10,6 +10,16 @@ active_validated_finish() {
     :
 }
 
+log() {
+    logger -t updatehub "updatehub-active-validated: $@"
+}
+
+setenv() {
+    log "setting variable $1 to $2"
+    fw_setenv "$1" "$2"
+    log "variable $1 is now $2"
+}
+
 if [ -f /etc/default/updatehub-active ]; then
     . /etc/default/updatehub-active
 fi
@@ -18,7 +28,7 @@ fi
 # reset 'upgrade_available' so U-Boot stop counting the boots
 if [ "$BOOTCOUNT_ENV" = "1" ]; then
     active_validated_prepare
-    fw_setenv upgrade_available 0
+    setenv upgrade_available 0
     active_validated_finish
     exit $?
 fi
