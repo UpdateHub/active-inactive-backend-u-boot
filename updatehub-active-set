@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 BOOTCOUNT_ENV=1
+SETENV_EXTRA_ARGS=""
 
 active_set_prepare() {
     :
@@ -14,9 +15,32 @@ log() {
     logger -t updatehub "updatehub-active-set: $@"
 }
 
+prepare_setenv_args() {
+    defenv=/tmp/updatehub.defenv
+    fw_env_config=/tmp/updatehub.fw_env_config
+
+    # Pass the configuration file coming from the update package.
+    if [ -e $fw_env_config ]; then
+        SETENV_EXTRA_ARGS="$SETENV_EXTRA_ARGS --config $fw_env_config"
+        log "using fw_env.config from the update package"
+    fi
+
+    # Pass the default environment coming from the update package.
+    if [ -e $defenv ]; then
+        if fw_setenv --help 2>&1 | grep -q '\-\-defenv'; then
+            SETENV_EXTRA_ARGS="$SETENV_EXTRA_ARGS --defenv $defenv"
+            log "using default environment from the update package"
+        else
+            log "could not use the default environment from the update \
+                 package as fw_setenv does not support it"
+            exit 1
+        fi
+    fi
+}
+
 setenv() {
     log "setting variable $1 to $2"
-    fw_setenv "$1" "$2"
+    fw_setenv $SETENV_EXTRA_ARGS "$1" "$2"
     log "variable $1 is now $2"
 }
 
@@ -28,6 +52,8 @@ active=$1
 
 case "$active" in
     0|1)
+        prepare_setenv_args
+
         # By default, machines use the bootcount inside environment so
         # we must set 'upgrade_available' to force U-Boot to count
         # the boot attempts. We also need to set 'bootcount' to 0 to ensure
