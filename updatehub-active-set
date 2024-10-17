@@ -28,7 +28,7 @@ prepare_setenv_args() {
     # Pass the default environment coming from the update package.
     if [ -e $defenv ]; then
         if fw_setenv --help 2>&1 | grep -q '\-\-defenv'; then
-            SETENV_EXTRA_ARGS="$SETENV_EXTRA_ARGS --defenv $defenv"
+            SETENV_EXTRA_ARGS="$SETENV_EXTRA_ARGS --defenv $defenv --script $defenv"
             log "using default environment from the update package"
         else
             log "could not use the default environment from the update \
